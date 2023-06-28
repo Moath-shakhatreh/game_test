@@ -75,12 +75,17 @@ def image(direction):
 	elif direction == "big_land" :
 		image = pygame.image.load("assets\Parallax\\aliens_big_ground_7-modified.png").convert_alpha()
 	elif direction == "eater":
-		image = [pygame.image.load("assets\Parallax\eater_01-modified.png").convert_alpha(),
-	   pygame.image.load("assets\Parallax\eater_02-modified.png").convert_alpha(),
-	   pygame.image.load("assets\Parallax\eater_03-modified.png").convert_alpha(),
-	   pygame.image.load("assets\Parallax\eater_04-modified.png").convert_alpha(),
-	   pygame.image.load("assets\Parallax\eater_05-modified.png").convert_alpha()]
-		
+		image = []
+		for i in range(1,13):
+			image.append(pygame.image.load(f"assets\Parallax\eater_{i}-modified.png").convert_alpha())
+	elif direction == "flying":
+		image = []
+		for i in range(1,5):
+			image.append(pygame.image.load(f"assets\Parallax\\flying_bot_{i}-modified.png").convert_alpha())
+	elif direction == "slime":
+		image = []
+		for i in range(1,5):
+			image.append(pygame.image.load(f"assets\Parallax\slime_{i}-modified.png").convert_alpha())
 	return image
 	
       
@@ -88,7 +93,7 @@ class Player(pygame.sprite.Sprite):
 	def __init__(self):
 		super().__init__()
 		self.image = image("right")
-		self.rect = self.image.get_rect(midbottom=(450, SCREEN_HEIGHT - (ground_height)))
+		self.rect = self.image.get_rect(midbottom=(300, SCREEN_HEIGHT - (ground_height)))
 		self.x_velocity = 0
 		self.y_velocity = 0
 		self.on_ground = True
@@ -179,16 +184,17 @@ class Objects_to_draw(pygame.sprite.Sprite):
 
 
 class Monsters(pygame.sprite.Sprite):
-	def __init__(self,type,x_pos,y_pos):
+	def __init__(self,type,x_pos,y_pos,distance):
 		super().__init__()
 		
 		self.type = image(type)
 		self.y_pos = y_pos
 		self.x_pos = x_pos             
 		self.animation_index = 0
-		self.state = True
-		self.direction = random.choice([-1, 1])
-		self.distance = random.randint(50,100)
+		self.state = False
+		self.direction = 3
+		self.distance = distance
+		# self.distance = random.randint(50,100)
 		self.image = self.type[int(self.animation_index)]
 		self.rect = self.image.get_rect(bottomleft = (self.x_pos,self.y_pos))
 
@@ -209,43 +215,19 @@ class Monsters(pygame.sprite.Sprite):
 			self.animation_index = 0
 		
 		self.rect.x += self.direction
-		# Check if the monster reaches the boundaries
-		if self.rect.x <= objects.sprites()[2].rect.x -100 or self.rect.x >= objects.sprites()[2].rect.x + 300:
-			self.direction *= -1  # Reverse the direction
+		
+		for i in range(len(objects.sprites())) :
+			if self.rect.x <= objects.sprites()[i].rect.x or self.rect.x >= objects.sprites()[i].rect.x + self.distance:
+				self.direction *= -1  # Reverse the direction
+				self.state = not(self.state)
+				
+		if self.state :
 			self.image = pygame.transform.flip(self.image, True,False)
-			# self.rect.y += 50  # Move down
+
+				
 
 			
-		
-
-		
-        
-        
-
-		# if self.x_pos == objects.sprites()[2].rect.x and scroll_S_L == True:
-		# 	self.auto = 4
-		# 	self.rect.x -= self.auto
-		# elif self.x_pos == objects.sprites()[2].rect.x and scroll_S_R == True:
-		# 	self.auto = 4
-		# 	self.rect.x += self.auto
-		# elif self.x_pos == objects.sprites()[2].rect.x :
-		# 	self.auto = 1
-		# 	self.counter += 1
-		# 	self.rect.x += self.auto
-		# if self.counter > 20 :
-			
-		# 	self.auto = 1
-		# 	self.rect.x -= self.auto
-		
-		# # if self.x_pos == objects.sprites()[3].rect.x + 50:
-		# # 	self.auto = 0.1
-		# # 	self.rect.x -= self.auto
-
-		
-			
-
-
-		
+	
 
 						
 def collide():
@@ -269,6 +251,9 @@ def collide():
 				player.sprite.rect.top = objects.sprites()[i].rect.bottom 
 				player.sprite.y_velocity = 0
 				player.sprite.on_ground = True
+		for i in range(len(monsters.sprites())):
+			if monsters.sprites()[i].rect.colliderect(player.sprite.rect):
+				print('collide')
 
 	    
 
@@ -292,14 +277,29 @@ objects.add(Obstacle("big_land",2730,SCREEN_HEIGHT+500))
 objects.add(Obstacle('land',(ground_width * 10)+20, SCREEN_HEIGHT-220))
 for i in range(11,13):
 	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
-for i in range(16,20):
-	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
 objects.add(Obstacle('land',(ground_width * 13)+70, SCREEN_HEIGHT-150))
 objects.add(Obstacle('land',(ground_width * 15)-50, SCREEN_HEIGHT-150))
+for i in range(16,20):
+	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
 
 # monsters 
 monsters = pygame.sprite.Group()
-monsters.add(Monsters('eater',objects.sprites()[2].rect.x,objects.sprites()[2].rect.top))
+monsters.add(Monsters('eater',objects.sprites()[2].rect.x + 150 ,objects.sprites()[2].rect.top,300))
+monsters.add(Monsters('eater',objects.sprites()[3].rect.x ,objects.sprites()[3].rect.top,300))
+monsters.add(Monsters('eater',objects.sprites()[4].rect.x  ,objects.sprites()[4].rect.top,300))
+monsters.add(Monsters('flying',objects.sprites()[5].rect.x ,objects.sprites()[5].rect.top,500))
+monsters.add(Monsters('slime',objects.sprites()[5].rect.x + 500,objects.sprites()[5].rect.top,1000))
+monsters.add(Monsters('eater',objects.sprites()[6].rect.x ,objects.sprites()[6].rect.top,300))
+monsters.add(Monsters('flying',objects.sprites()[7].rect.x  ,objects.sprites()[7].rect.top,500))
+monsters.add(Monsters('slime',objects.sprites()[9].rect.x ,objects.sprites()[9].rect.top,300))
+monsters.add(Monsters('eater',objects.sprites()[10].rect.x ,objects.sprites()[10].rect.top,300))
+monsters.add(Monsters('flying',objects.sprites()[11].rect.x  ,objects.sprites()[11].rect.top,500))
+
+
+
+
+
+
 
 
 # objects just to be drown
