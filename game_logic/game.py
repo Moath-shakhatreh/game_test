@@ -15,8 +15,7 @@ pygame.display.set_caption("assets\Parallax")
 
 #define game variables
 scroll = 0
-scroll_S_L = False
-scroll_S_R = False
+
 
 # images
 ground_image = pygame.image.load("assets\Parallax\\aliens_ground_04-modified.png").convert_alpha()
@@ -41,39 +40,56 @@ def draw_bg():
       screen.blit(i, ((x * bg_width) - scroll * speed, 0))
       speed += 0.1
 
-# def update_bg(scroll):
-	
-# 	#get keypresses
-# 	key = pygame.key.get_pressed()
-# 	if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
-# 		scroll += 5
-		
-# 	if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
-# 		scroll -= 5
 		
  
 
-def image(direction):
-	if direction == "left":
-		image = pygame.image.load("assets\character animation\idel\idel1.png").convert_alpha()
-		image = pygame.transform.scale2x(image)
-		image = pygame.transform.flip(image,True,False) 
-	elif direction == "right":
-		image = pygame.image.load("assets\character animation\idel\idel1.png").convert_alpha()
-		image = pygame.transform.scale2x(image)
+def image(direction,flip = False):
+	if direction == "idel":
+		image = []
+		for i in range(1,7):
+			image_ = pygame.image.load(f"assets\character animation\idel\idel{i}.png").convert_alpha()
+			image_ = pygame.transform.flip(image_,flip,False)
+			image.append(pygame.transform.scale2x(image_))
+	elif direction == "running":
+		image = []
+		for i in range(1,9):
+			image_ = pygame.image.load(f"assets\character animation\\running\\running{i}.png").convert_alpha()
+			image_ = pygame.transform.flip(image_,flip,False)
+			image.append(pygame.transform.scale2x(image_))
+	# elif direction == "left":
+	# 	image = []
+	# 	for i in range(1,9):
+	# 		image_ = pygame.image.load(f"assets\character animation\\running\\running{i}.png").convert_alpha()
+	# 		image_ = pygame.transform.flip(image_,True,False)
+	# 		image.append(pygame.transform.scale2x(image_))
+	elif direction == "attack":
+		image = []
+		for i in range(1,9):
+			image_ = pygame.image.load(f"assets\character animation\\attack\\attack{i}.png").convert_alpha()
+			image_ = pygame.transform.flip(image_,flip,False)
+			image.append(pygame.transform.scale2x(image_))
 	elif direction == "tree":
 		image = pygame.image.load("assets\Parallax\Alien_tileset_tree_06.png").convert_alpha()
-		# image = pygame.transform.flip(image, True, False)
-		# image = pygame.transform.scale2x(image)
 	elif direction == "jump" :
-		image = pygame.image.load("assets\character animation\jump\jump5.png").convert_alpha()
-		image = pygame.transform.scale2x(image)
+		image = []
+		for i in range(1,9):
+			image_ = pygame.image.load(f"assets\character animation\jump\jump{i}.png").convert_alpha()
+			image.append(pygame.transform.scale2x(image_))
+	elif direction == "damage":
+		image = []
+		for i in range(1,5):
+			image_ = pygame.image.load(f"assets\character animation\damage\damage{i}.png").convert_alpha()
+			image.append(pygame.transform.scale2x(image_))
 	elif direction == "land" :
 		image = pygame.image.load("assets\Parallax\\aliens_ground_04-modified.png").convert_alpha()
 	elif direction == 'door': 
 		image = pygame.image.load("assets\Parallax\door_02-modified.png").convert_alpha()
 	elif direction == "big_land" :
 		image = pygame.image.load("assets\Parallax\\aliens_big_ground_7-modified.png").convert_alpha()
+	elif direction == "land_2" :
+		image = pygame.image.load("assets\Parallax\land_type2_1.png").convert_alpha()
+	elif direction == "land_3" :
+		image = pygame.image.load("assets\Parallax\land_type3_1.png").convert_alpha()
 	elif direction == "eater":
 		image = []
 		for i in range(1,13):
@@ -86,38 +102,104 @@ def image(direction):
 		image = []
 		for i in range(1,5):
 			image.append(pygame.image.load(f"assets\Parallax\slime_{i}-modified.png").convert_alpha())
+	elif direction == "coin":
+		image = []
+		for i in range(1,11):
+			image.append(pygame.image.load(f"assets\Parallax\Gold_{i}.png").convert_alpha())
+	elif direction == "key":
+		image = []
+		for i in range(0,24):
+			image.append(pygame.image.load(f"assets\Parallax\key_32x32_24f ({i}).png").convert_alpha())
 	return image
 	
       
 class Player(pygame.sprite.Sprite):
-	def __init__(self):
+	def __init__(self,name):
 		super().__init__()
-		self.image = image("right")
+		self.type = image("idel")
+		self.index = 0
+		self.image = self.type[int(self.index)]
 		self.rect = self.image.get_rect(midbottom=(300, SCREEN_HEIGHT - (ground_height)))
 		self.x_velocity = 0
 		self.y_velocity = 0
 		self.on_ground = True
+		self.flip = False
+		self.state = True
+		self.name = name
+
+		
 
 	def update(self):
 		self.x_velocity = 0
 		keys = pygame.key.get_pressed()
+		self.index += 0.1
+		if self.index > len(self.type)-1:
+			self.index = 0
+		self.image = self.type[int(self.index)]
+		if self.on_ground :
+			self.type = image("idel",self.flip)
 
-		if keys[pygame.K_LEFT]:
-			self.x_velocity = -5
-			self.image = image("left")
+		if self.name == "player_1":
+
+			if keys[pygame.K_LEFT] :
+				self.x_velocity = -5
+				self.type = image("running",self.flip)
+				self.flip = True
+				
+			if keys[pygame.K_RIGHT] :
+				self.x_velocity = 5
+				self.type = image("running")
+				self.flip = False
+				
+			# Jumping
+			if keys[pygame.K_SPACE] and self.on_ground :
+				self.y_velocity = -18
+				self.on_ground = False
+				self.type = image('jump')
+				# if self.index == 9:
+
+			for i in range(len(monsters.sprites())):
+				if self.rect.colliderect(monsters.sprites()[i].rect):
+					self.type = image('damage')
+
+			if keys[pygame.K_RSHIFT]:
+				self.type = image('attack',self.flip)
+	
+				
+				
+
+		if self.name == "player_2":
+
+			if keys[pygame.K_a] :
+				self.x_velocity = -5
+				self.type = image("running",self.flip)
+				self.flip = True
+				
+			if keys[pygame.K_d] :
+				self.x_velocity = 5
+				self.type = image("running")
+				self.flip = False
+				
+			# Jumping
+			if keys[pygame.K_w] and self.on_ground :
+				self.y_velocity = -18
+				self.on_ground = False
+				self.type = image('jump')
+			# objects.sprites()[i].rect.colliderect(player.sprite.rect):
+
+			for i in range(len(monsters.sprites())):
+				if self.rect.colliderect(monsters.sprites()[i].rect):
+					self.type = image('damage')
 			
-			
-			
-		if keys[pygame.K_RIGHT]:
-			self.x_velocity = 5
-			self.image = image("right")
+			if keys[pygame.K_f]:
+				self.type = image('attack',self.flip)
+
+
 			
 
-		# Jumping
-		if keys[pygame.K_SPACE] and self.on_ground:
-			self.y_velocity = -18
-			self.on_ground = False
-			# self.image = image("jump")
+
+
+		
 
 		# Apply gravity
 		self.y_velocity += 0.8
@@ -135,6 +217,8 @@ class Player(pygame.sprite.Sprite):
 		# dsfsdf 
 		if self.rect.right > 1000 : 
 			self.rect.right = 1000
+
+	
 		
 class Obstacle(pygame.sprite.Sprite):
 	def __init__(self,type,x_pos,y_pos):
@@ -184,17 +268,17 @@ class Objects_to_draw(pygame.sprite.Sprite):
 
 
 class Monsters(pygame.sprite.Sprite):
-	def __init__(self,type,x_pos,y_pos,distance):
+	def __init__(self,type,x_pos,y_pos,distance,speed):
 		super().__init__()
 		
 		self.type = image(type)
-		self.y_pos = y_pos
-		self.x_pos = x_pos             
+		self.x_pos = objects.sprites()[x_pos].rect.x           
+		self.y_pos = objects.sprites()[y_pos].rect.top
+		self.start_point = x_pos
 		self.animation_index = 0
 		self.state = False
-		self.direction = 3
+		self.speed = speed
 		self.distance = distance
-		# self.distance = random.randint(50,100)
 		self.image = self.type[int(self.animation_index)]
 		self.rect = self.image.get_rect(bottomleft = (self.x_pos,self.y_pos))
 
@@ -214,22 +298,58 @@ class Monsters(pygame.sprite.Sprite):
 		if self.animation_index > len(self.type)-1 :
 			self.animation_index = 0
 		
-		self.rect.x += self.direction
+		self.rect.x += self.speed
 		
-		for i in range(len(objects.sprites())) :
-			if self.rect.x <= objects.sprites()[i].rect.x or self.rect.x >= objects.sprites()[i].rect.x + self.distance:
-				self.direction *= -1  # Reverse the direction
-				self.state = not(self.state)
+		
+		if self.rect.x <= objects.sprites()[self.start_point].rect.x or self.rect.x >= objects.sprites()[self.start_point].rect.x + self.distance:
+			self.speed *= -1  # Reverse the direction
+			self.state = not(self.state)
 				
 		if self.state :
 			self.image = pygame.transform.flip(self.image, True,False)
 
+class coins(pygame.sprite.Sprite):
+	def __init__(self,type,x_pos,y_pos):
+		super().__init__()
+		
+		self.type = image(type)
+		self.x_pos = x_pos          
+		self.y_pos = y_pos
+		self.animation_index = 0
+		self.state = False
+		self.current_coins = 0
+		self.image = self.type[int(self.animation_index)]
+		self.rect = self.image.get_rect(bottomleft = (self.x_pos,self.y_pos))
+
+                
+	def update(self):
+           #get keypresses
+		key = pygame.key.get_pressed()
+		if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
+			self.rect.x += 5
+		if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
+			self.rect.x -= 5
+		
+
+		self.animation_index += 0.1
+		self.image = self.type[int(self.animation_index)-1]
+		if self.animation_index > len(self.type) :
+			self.animation_index = 0
+		
+		
+		if player.sprite.rect.colliderect(self.rect):
+			print(55555)
+			
+			self.kill()
+		
+		
+		
 				
 
 			
 	
 
-						
+X = 0				
 def collide():
 	for i in range(len(objects.sprites())):
 		if objects.sprites()[i].rect.colliderect(player.sprite.rect): 
@@ -251,9 +371,45 @@ def collide():
 				player.sprite.rect.top = objects.sprites()[i].rect.bottom 
 				player.sprite.y_velocity = 0
 				player.sprite.on_ground = True
+
+		if objects.sprites()[i].rect.colliderect(player_2.sprite.rect): 
+			if player_2.sprite.x_velocity < 0  and player_2.sprite.on_ground == False:
+				# player.sprite.rect.left = objects.sprites()[i].rect.right
+				player_2.sprite.x_velocity = 0
+
+			if player_2.sprite.x_velocity > 0 and player_2.sprite.on_ground == False:
+				# player.sprite.rect.right = objects.sprites()[i].rect.left
+				player_2.sprite.x_velocity = 0
+
+
+			if player_2.sprite.y_velocity > 0 : 
+				player_2.sprite.rect.bottom = objects.sprites()[i].rect.top 
+				player_2.sprite.y_velocity = 0 
+				player_2.sprite.on_ground = True
+
+			if player_2.sprite.y_velocity < 0 : 
+				player_2.sprite.rect.top = objects.sprites()[i].rect.bottom 
+				player_2.sprite.y_velocity = 0
+				player_2.sprite.on_ground = True
 		for i in range(len(monsters.sprites())):
-			if monsters.sprites()[i].rect.colliderect(player.sprite.rect):
+			if monsters.sprites()[i].rect.colliderect(player.sprite.rect) :
+				# pass
 				print('collide')
+		for i in range(len(monsters.sprites())):
+			if monsters.sprites()[i].rect.colliderect(player_2.sprite.rect) :
+				# pass
+				print('collide_2')
+	# for i in range(len(coin.sprites())-1):
+	# 	if player.sprite.rect.colliderect(coin.sprites()[i].rect):
+	# 		print(55555)
+	# 		X += 1
+	# 		coin.sprites()[i].kill()
+	
+	
+	# text_font = pygame.font.SysFont("Arial",30)
+	# img = text_font.render(f"{X}/25",True,(255,255,255))
+	# screen.blit(img,(500,200))
+	
 
 	    
 
@@ -263,7 +419,10 @@ def collide():
 
 # player
 player = pygame.sprite.GroupSingle()
-player.add(Player())
+player.add(Player('player_1'))
+
+player_2 = pygame.sprite.GroupSingle()
+player_2.add(Player('player_2'))
 
 
 
@@ -273,7 +432,7 @@ for i in range(3):
 	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
 objects.add(Obstacle('land',1300, SCREEN_HEIGHT-150))
 objects.add(Obstacle('land',1820, SCREEN_HEIGHT-320))
-objects.add(Obstacle("big_land",2730,SCREEN_HEIGHT+500))
+objects.add(Obstacle("big_land",2730,SCREEN_HEIGHT+600))
 objects.add(Obstacle('land',(ground_width * 10)+20, SCREEN_HEIGHT-220))
 for i in range(11,13):
 	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
@@ -281,22 +440,62 @@ objects.add(Obstacle('land',(ground_width * 13)+70, SCREEN_HEIGHT-150))
 objects.add(Obstacle('land',(ground_width * 15)-50, SCREEN_HEIGHT-150))
 for i in range(16,20):
 	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
+objects.add(Obstacle('land',(ground_width * 2)+100, SCREEN_HEIGHT-350))
+objects.add(Obstacle('land_2',(ground_width * 16)+100, SCREEN_HEIGHT-400))
+objects.add(Obstacle('land_2',(ground_width * 17)+100, SCREEN_HEIGHT-400))
+objects.add(Obstacle('land_2',(ground_width * 18)+100, SCREEN_HEIGHT-400))
+objects.add(Obstacle('land_3',(ground_width * 18)+500, SCREEN_HEIGHT-300))
+objects.add(Obstacle('land_3',(ground_width * 18)+800, SCREEN_HEIGHT-500))
+objects.add(Obstacle('land_3',(ground_width * 18)+1100, SCREEN_HEIGHT-500))
+
 
 # monsters 
 monsters = pygame.sprite.Group()
-monsters.add(Monsters('eater',objects.sprites()[2].rect.x + 150 ,objects.sprites()[2].rect.top,300))
-monsters.add(Monsters('eater',objects.sprites()[3].rect.x ,objects.sprites()[3].rect.top,300))
-monsters.add(Monsters('eater',objects.sprites()[4].rect.x  ,objects.sprites()[4].rect.top,300))
-monsters.add(Monsters('flying',objects.sprites()[5].rect.x ,objects.sprites()[5].rect.top,500))
-monsters.add(Monsters('slime',objects.sprites()[5].rect.x + 500,objects.sprites()[5].rect.top,1000))
-monsters.add(Monsters('eater',objects.sprites()[6].rect.x ,objects.sprites()[6].rect.top,300))
-monsters.add(Monsters('flying',objects.sprites()[7].rect.x  ,objects.sprites()[7].rect.top,500))
-monsters.add(Monsters('slime',objects.sprites()[9].rect.x ,objects.sprites()[9].rect.top,300))
-monsters.add(Monsters('eater',objects.sprites()[10].rect.x ,objects.sprites()[10].rect.top,300))
-monsters.add(Monsters('flying',objects.sprites()[11].rect.x  ,objects.sprites()[11].rect.top,500))
+monsters.add(Monsters('eater',2,2,300,3))
+monsters.add(Monsters('eater',3,3,300,4))
+monsters.add(Monsters('eater',4,4,300,4))
+monsters.add(Monsters('flying',5,5,1000,2))
+monsters.add(Monsters('slime',5,5,1000,4))
+monsters.add(Monsters('eater',5,5,1000,3))
+monsters.add(Monsters('eater',6,6,300,3))
+monsters.add(Monsters('flying',7,7,620,2))
+monsters.add(Monsters('slime',7,7,620,4))
+monsters.add(Monsters('slime',9,9,300,4))
+monsters.add(Monsters('eater',10,10,300,3))
+monsters.add(Monsters('flying',11,11,650,2))
+monsters.add(Monsters('slime',11,11,650,5))
+monsters.add(Monsters('flying',13,13,500,2))
+monsters.add(Monsters('slime',13,13,500,5))
+monsters.add(Monsters('slime',15,15,300,4))
 
 
-
+coin = pygame.sprite.Group()
+coin.add(coins('coin',objects.sprites()[15].rect.x +20 ,objects.sprites()[15].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[15].rect.x + 170 ,objects.sprites()[15].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[15].rect.x + 300 ,objects.sprites()[15].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[3].rect.x + 400 ,objects.sprites()[3].rect.y - 80))
+coin.add(coins('coin',objects.sprites()[4].rect.x + 410 ,objects.sprites()[4].rect.y - 80))
+coin.add(coins('coin',objects.sprites()[5].rect.x + 180 ,objects.sprites()[5].rect.y - 150))
+coin.add(coins('coin',objects.sprites()[5].rect.x + 380 ,objects.sprites()[5].rect.y - 20))
+coin.add(coins('coin',objects.sprites()[5].rect.x + 580 ,objects.sprites()[5].rect.y - 150))
+coin.add(coins('coin',objects.sprites()[5].rect.x + 780 ,objects.sprites()[5].rect.y - 20))
+coin.add(coins('coin',objects.sprites()[5].rect.x + 980 ,objects.sprites()[5].rect.y - 150))
+coin.add(coins('coin',objects.sprites()[6].rect.x + 160 ,objects.sprites()[6].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[7].rect.x + 50 ,objects.sprites()[7].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[7].rect.x + 350 ,objects.sprites()[7].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[7].rect.x + 600 ,objects.sprites()[7].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[9].rect.x + 160 ,objects.sprites()[9].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[9].rect.x + 450 ,objects.sprites()[9].rect.y - 150))
+coin.add(coins('coin',objects.sprites()[10].rect.x + 160 ,objects.sprites()[10].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[11].rect.x + 160 ,objects.sprites()[11].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[12].rect.x + 160 ,objects.sprites()[12].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[13].rect.x + 160 ,objects.sprites()[13].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[14].rect.x + 160 ,objects.sprites()[14].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[16].rect.x + 20 ,objects.sprites()[16].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[17].rect.x + 20 ,objects.sprites()[17].rect.y - 40))
+coin.add(coins('coin',objects.sprites()[18].rect.x + 20 ,objects.sprites()[18].rect.y - 40))
+coin.add(coins('key',objects.sprites()[21].rect.x + 5 ,objects.sprites()[21].rect.y - 20))
+coin.add(coins('coin',objects.sprites()[21].rect.x + 1000 ,objects.sprites()[21].rect.y - 20))
 
 
 
@@ -305,8 +504,7 @@ monsters.add(Monsters('flying',objects.sprites()[11].rect.x  ,objects.sprites()[
 # objects just to be drown
 objects_d = pygame.sprite.Group()
 objects_d.add(Objects_to_draw('tree',250,SCREEN_HEIGHT-ground_height+20))
-objects_d.add(Objects_to_draw('door',(ground_width * 19)+(ground_width/4),SCREEN_HEIGHT - ground_height+20))
-
+objects_d.add(Objects_to_draw('door',(ground_width * 19)+130,SCREEN_HEIGHT - ground_height+20))
 
 
 		
@@ -323,26 +521,26 @@ while run:
 	key = pygame.key.get_pressed()
 	if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
 		scroll -= 2
-		scroll_S_L = True
 	elif key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
 		scroll += 2
-		scroll_S_R = True
-	else:
-		scroll_S_R = False
-		scroll_S_L = False
+	
+	
 
-	# draw_trees() 
-	# screen.fill('Red')
+	
 	objects_d.update()  
 	objects_d.draw(screen) 
 	objects.update()  
 	objects.draw(screen) 
 	monsters.update()
 	monsters.draw(screen)
+	coin.update()
+	coin.draw(screen)
 	player.update() 
 	player.draw(screen) 
+	player_2.update() 
+	player_2.draw(screen) 
 	collide()
-	# print(player.sprite.rect.right)
+	
 
 	#event handlers
 	for event in pygame.event.get():
