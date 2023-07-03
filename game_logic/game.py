@@ -697,7 +697,7 @@ while run:
 			
 			# player.sprite.back_ground.play()
 			# pygame.mixer.Channel(6).play(back_ground_)
-			# back_ground_.play()
+			back_ground_.play()
 			font = pygame.font.Font("assets\\fonts\game_over.ttf", 90)
 			text = font.render(f'Coins : {coil_count}/24', True, "#F5F5F5")
 			text_rect = text.get_rect(center=(SCREEN_WIDTH/2,50))

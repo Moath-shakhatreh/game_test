@@ -119,7 +119,7 @@ def image(direction,flip = False):
 			image.append(pygame.image.load(f"assets\Parallax\key_32x32_24f ({i}).png").convert_alpha())
 	elif direction == 'wall':
 		image = []
-		image.append(pygame.image.load(f"assets\Parallax\Wall_1.png").convert_alpha())
+		image.append(pygame.image.load(f"assets\Parallax\Wall_5.png").convert_alpha())
 	elif direction == 'ground':
 		image = pygame.image.load(f"assets\Parallax\ground_4.png").convert_alpha()
 	elif direction == 'up_ground':
@@ -147,6 +147,13 @@ def image(direction,flip = False):
 		image = pygame.image.load(f"assets\Parallax\\black_box_1.png").convert_alpha()
 	elif direction == "floating_land":
 		image = pygame.image.load(f"assets\Parallax\\floating_land_1-modified.png").convert_alpha()
+	elif direction == "last_wall":
+		image = pygame.image.load(f"assets\Parallax\last_wall-modified.png").convert_alpha()
+	elif direction == "chess":
+		image = []
+		for i in range(1,2):
+			image_ = pygame.image.load(f"assets\Parallax\chess_{i}-modified.png").convert_alpha()
+			image.append(image_)
 	return image
 
 ground_2 = pygame.image.load(f"assets\Parallax\ground_4.png").convert_alpha()
@@ -707,18 +714,26 @@ for i in range(6,9):
 	objects_level_2.add(Obstacle('ground',ground_2_width/2 + (i * ground_2_width),SCREEN_HEIGHT-80))
 for i in range(9,12):
 	objects_level_2.add(Obstacle('ground',ground_2_width/2 + (i * ground_2_width),SCREEN_HEIGHT))
-for i in range(12,15):
-	objects_level_2.add(Obstacle('ground',ground_2_width/2 + (i * ground_2_width),SCREEN_HEIGHT+50))
-for i in range(15,17):
-	objects_level_2.add(Obstacle('ground',ground_2_width/2 + (i * ground_2_width),SCREEN_HEIGHT))
-objects_level_2.add(Obstacle('s_ground',ground_2_width/2 + (17 * ground_2_width),SCREEN_HEIGHT+50))
+# for i in range(12,15):
+# 	objects_level_2.add(Obstacle('ground',ground_2_width/2 + (i * ground_2_width),SCREEN_HEIGHT+50))
+# for i in range(15,17):
+# 	objects_level_2.add(Obstacle('ground',ground_2_width/2 + (i * ground_2_width),SCREEN_HEIGHT))
+objects_level_2.add(Obstacle('s_ground',ground_2_width/2 + (18 * ground_2_width),SCREEN_HEIGHT+120))
 for i in range(0,23):
-	objects_level_2.add(Obstacle('up_ground',ground_2_width/2 + (i * ground_2_width),120))
+	objects_level_2.add(Obstacle('up_ground',ground_2_width/2 + (i * ground_2_width),55))
 for i in range(6,9):
 	objects_level_2.add(Obstacle('black_box',300/2 + (i * 300),SCREEN_HEIGHT))
-objects_level_2.add(Obstacle('black_box',300/2 + (16 * 300)+120,SCREEN_HEIGHT+65))
+# objects_level_2.add(Obstacle('black_box',300/2 + (16 * 300)+120,SCREEN_HEIGHT+65))
 objects_level_2.add(Obstacle('black_box',150,SCREEN_HEIGHT+60))
-objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (5 * ground_2_width),SCREEN_HEIGHT-300))
+objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (5 * ground_2_width) - 130,SCREEN_HEIGHT-350))
+objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (5 * ground_2_width) - 550,SCREEN_HEIGHT-400))
+objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (13 * ground_2_width) - 170,SCREEN_HEIGHT-200))
+objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (13 * ground_2_width) +300,SCREEN_HEIGHT-280))
+objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (13 * ground_2_width) +850,SCREEN_HEIGHT-350))
+objects_level_2.add(Obstacle('last_wall',ground_2_width/2 + (19 * ground_2_width)+200,SCREEN_HEIGHT))
+objects_level_2.add(Obstacle('black_box',ground_2_width/2 + (19 * ground_2_width)+100,SCREEN_HEIGHT))
+objects_level_2.add(Obstacle('black_box',ground_2_width/2 + (19 * ground_2_width)+100,SCREEN_HEIGHT-80))
+# objects_level_2.add(Obstacle('black_box',ground_2_width/2 + (19 * ground_2_width)+100,SCREEN_HEIGHT-140))
 
 
 # monsters 
@@ -743,8 +758,12 @@ monsters.add(Monsters('slime',objects.sprites()[15].rect.x,objects.sprites()[15]
 # for level two
 monsters_level_2 = pygame.sprite.Group()
 monsters_level_2.add(Monsters('eater',objects_level_2.sprites()[2].rect.x,objects_level_2.sprites()[2].rect.top,1000,4,2))
-monsters_level_2.add(Monsters('flying',objects_level_2.sprites()[2].rect.x + 900,objects_level_2.sprites()[2].rect.top,1000,3,2))
+monsters_level_2.add(Monsters('slime',objects_level_2.sprites()[2].rect.x + 900,objects_level_2.sprites()[2].rect.top,1000,5,2))
 monsters_level_2.add(Monsters('flying',objects_level_2.sprites()[6].rect.x  ,objects_level_2.sprites()[6].rect.top ,800,3,6))
+monsters_level_2.add(Monsters('eater',objects_level_2.sprites()[9].rect.x  ,objects_level_2.sprites()[9].rect.top ,800,3,9))
+monsters_level_2.add(Monsters('slime',objects_level_2.sprites()[42].rect.x ,objects_level_2.sprites()[42].rect.top,220,4,42))
+monsters_level_2.add(Monsters('slime',objects_level_2.sprites()[43].rect.x ,objects_level_2.sprites()[43].rect.top,220,4,43))
+monsters_level_2.add(Monsters('slime',objects_level_2.sprites()[44].rect.x ,objects_level_2.sprites()[44].rect.top,220,4,44))
 
 
 
@@ -775,13 +794,34 @@ coin.add(coins('coin',objects.sprites()[17].rect.x + 20 ,objects.sprites()[17].r
 coin.add(coins('coin',objects.sprites()[18].rect.x + 20 ,objects.sprites()[18].rect.y - 40))
 coin.add(coins('coin',objects.sprites()[21].rect.x + 1000 ,objects.sprites()[21].rect.y - 20))
 
+# for level 2
+coin_level_2 = pygame.sprite.Group()
+coin_level_2.add(coins('coin',objects_level_2.sprites()[1].rect.x +100 ,objects_level_2.sprites()[2].rect.y -10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[2].rect.x +180 ,objects_level_2.sprites()[2].rect.y -10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[3].rect.x +180,objects_level_2.sprites()[2].rect.y -10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[3].rect.x +120,objects_level_2.sprites()[2].rect.y -350))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[4].rect.x +180,objects_level_2.sprites()[2].rect.y -10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[40].rect.x+ 140,objects_level_2.sprites()[40].rect.y -10))
+
+
+
+coin_level_2.add(coins('coin',objects_level_2.sprites()[6].rect.x +20,objects_level_2.sprites()[6].rect.y-10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[6].rect.x +120,objects_level_2.sprites()[6].rect.y-150))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[6].rect.x +240,objects_level_2.sprites()[6].rect.y-10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[6].rect.x +340,objects_level_2.sprites()[6].rect.y-150))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[6].rect.x +460,objects_level_2.sprites()[6].rect.y-10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[6].rect.x +560,objects_level_2.sprites()[6].rect.y-150))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[6].rect.x +680,objects_level_2.sprites()[6].rect.y-10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[6].rect.x +780,objects_level_2.sprites()[6].rect.y-150))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[42].rect.x +120 ,objects_level_2.sprites()[42].rect.y -20))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[43].rect.x +120 ,objects_level_2.sprites()[43].rect.y -20))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[44].rect.x +120 ,objects_level_2.sprites()[44].rect.y -20))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[9].rect.x +20 ,objects_level_2.sprites()[9].rect.y -10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[9].rect.x +320 ,objects_level_2.sprites()[9].rect.y -10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[9].rect.x +620 ,objects_level_2.sprites()[9].rect.y -10))
 
 keys = pygame.sprite.GroupSingle()
 keys.add(key('key',objects.sprites()[21].rect.x + 5 ,objects.sprites()[21].rect.y - 20))
-
-
-
-
 
 
 
@@ -795,7 +835,7 @@ objects_d.add(Objects_to_draw('door',(ground_width * 19)+130,SCREEN_HEIGHT - gro
 # for level two
 objects_d_level_2 = pygame.sprite.Group()
 for i in range(2):
-	objects_d_level_2.add(Objects_to_draw('wall',6188 * i ,750))
+	objects_d_level_2.add(Objects_to_draw('wall',6000 * i ,750))
 objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[2].rect.x -200,objects.sprites()[2].rect.y - 180))
 objects_d_level_2.add(Objects_to_draw('cell',objects_level_2.sprites()[2].rect.x +10,objects.sprites()[2].rect.y-70))
 objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[2].rect.x +220,objects.sprites()[2].rect.y - 180))
@@ -811,6 +851,13 @@ objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[7].rect.
 objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[10].rect.x ,objects.sprites()[10].rect.y ))
 objects_d_level_2.add(Objects_to_draw('cell',objects_level_2.sprites()[10].rect.x +210,objects.sprites()[10].rect.y + 100))
 objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[10].rect.x +440,objects.sprites()[10].rect.y))
+
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[43].rect.x -380 ,objects_level_2.sprites()[43].rect.y -100))
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[43].rect.x +120 ,objects_level_2.sprites()[43].rect.y -100))
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[43].rect.x +620 ,objects_level_2.sprites()[43].rect.y -100))
+
+objects_d_level_2.add(Objects_to_draw('chess',objects_level_2.sprites()[12].rect.x + 500 ,objects_level_2.sprites()[12].rect.y))
+
 
 
 
@@ -885,7 +932,8 @@ while run:
 			monsters_level_2.draw(screen)
 			# coin.update()
 			# coin.draw(screen)
-			
+			coin_level_2.update()
+			coin_level_2.draw(screen)
 			# keys.update()
 			# keys.draw(screen)
 			# player.update() 
@@ -897,6 +945,7 @@ while run:
 			# health.update()
 			# health.draw(screen)
 			collide()
+			# print(len(objects_level_2.sprites()))
 			
 
 	#event handlers
