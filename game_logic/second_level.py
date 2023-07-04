@@ -154,6 +154,18 @@ def image(direction,flip = False):
 		for i in range(1,2):
 			image_ = pygame.image.load(f"assets\Parallax\chess_{i}-modified.png").convert_alpha()
 			image.append(image_)
+	elif direction == "wispy":
+		image = []
+		for i in range(1,11):
+			image_ = pygame.image.load(f"assets\Parallax\Wispy{i}.png").convert_alpha()
+			image.append(image_)
+	elif direction == "ghost":
+		image = []
+		for i in range(1,5):
+			image_ = pygame.image.load(f"assets\Parallax\ghost-Sheet_{i}.png").convert_alpha()
+			image.append(image_)
+	elif direction == 'small_land':
+		image = pygame.image.load(f"assets\Parallax\small_land-modified.png").convert_alpha()
 	return image
 
 ground_2 = pygame.image.load(f"assets\Parallax\ground_4.png").convert_alpha()
@@ -199,67 +211,67 @@ class Player(pygame.sprite.Sprite):
 		if self.on_ground :
 			self.type = image("idel",self.flip)
 
-		if self.name == "player_1":
+		# if self.name == "player_1":
 
-			if keys[pygame.K_LEFT] :
-				self.x_velocity = -5
-				self.type = image("running",self.flip)
-				self.flip = True
+		# 	if keys[pygame.K_LEFT] :
+		# 		self.x_velocity = -5
+		# 		self.type = image("running",self.flip)
+		# 		self.flip = True
 				
-			if keys[pygame.K_RIGHT] :
-				self.x_velocity = 5
-				self.type = image("running")
-				self.flip = False
+		# 	if keys[pygame.K_RIGHT] :
+		# 		self.x_velocity = 5
+		# 		self.type = image("running")
+		# 		self.flip = False
 				
-			# Jumping
-			if keys[pygame.K_UP] and self.on_ground :
+		# 	# Jumping
+		# 	if keys[pygame.K_UP] and self.on_ground :
 				
-				self.y_velocity = -18
-				self.on_ground = False
-				self.type = image('jump')
-				pygame.mixer.Channel(0).play(self.jump_sound) 
+		# 		self.y_velocity = -18
+		# 		self.on_ground = False
+		# 		self.type = image('jump')
+		# 		pygame.mixer.Channel(0).play(self.jump_sound) 
 
-			for i in range(len(monsters.sprites())):
-				if self.rect.colliderect(monsters.sprites()[i].rect):
-					self.type = image('damage')
+		# 	for i in range(len(monsters.sprites())):
+		# 		if self.rect.colliderect(monsters.sprites()[i].rect):
+		# 			self.type = image('damage')
 
-			if keys[pygame.K_RSHIFT]:
-				self.type = image('attack',self.flip)
-				x = 0
-				if x == 0 :
-					# self.attack_sound.play()
-					pygame.mixer.Channel(7).play(self.attack_sound)
-				x += 1
-				if x == len(self.type) - 1:
-					x = 0
+		# 	if keys[pygame.K_RSHIFT]:
+		# 		self.type = image('attack',self.flip)
+		# 		x = 0
+		# 		if x == 0 :
+		# 			# self.attack_sound.play()
+		# 			pygame.mixer.Channel(7).play(self.attack_sound)
+		# 		x += 1
+		# 		if x == len(self.type) - 1:
+		# 			x = 0
 		
 
-		if self.name == "player_2":
+		# if self.name == "player_2":
 
-			if keys[pygame.K_a] :
-				self.x_velocity = -5
-				self.type = image("running",self.flip)
-				self.flip = True
+		# 	if keys[pygame.K_a] :
+		# 		self.x_velocity = -5
+		# 		self.type = image("running",self.flip)
+		# 		self.flip = True
 				
-			if keys[pygame.K_d] :
-				self.x_velocity = 5
-				self.type = image("running")
-				self.flip = False
+		# 	if keys[pygame.K_d] :
+		# 		self.x_velocity = 5
+		# 		self.type = image("running")
+		# 		self.flip = False
 				
-			# Jumping
-			if keys[pygame.K_w] and self.on_ground:
-				self.y_velocity = -18
-				self.on_ground = False
-				self.type = image('jump')
-				pygame.mixer.Channel(1).play(self.jump_sound) 
+		# 	# Jumping
+		# 	if keys[pygame.K_w] and self.on_ground:
+		# 		self.y_velocity = -18
+		# 		self.on_ground = False
+		# 		self.type = image('jump')
+		# 		pygame.mixer.Channel(1).play(self.jump_sound) 
 			
 
-			for i in range(len(monsters.sprites())):
-				if self.rect.colliderect(monsters.sprites()[i].rect):
-					self.type = image('damage')
+		# 	for i in range(len(monsters.sprites())):
+		# 		if self.rect.colliderect(monsters.sprites()[i].rect):
+		# 			self.type = image('damage')
 			
-			if keys[pygame.K_f]:
-				self.type = image('attack',self.flip)
+		# 	if keys[pygame.K_f]:
+		# 		self.type = image('attack',self.flip)
 				
 
 		if self.name == "player_level_2":          # 555555555555555555
@@ -279,15 +291,21 @@ class Player(pygame.sprite.Sprite):
 				self.y_velocity = -18
 				self.on_ground = False
 				self.type = image('jump')
-				# pygame.mixer.Channel(1).play(self.jump_sound) 
+				pygame.mixer.Channel(1).play(self.jump_sound) 
 			
 
 			# for i in range(len(monsters.sprites())):
 			# 	if self.rect.colliderect(monsters.sprites()[i].rect):
 			# 		self.type = image('damage')
+
+			for i in range(len(monsters_level_2.sprites())):
+				if self.rect.colliderect(monsters_level_2.sprites()[i].rect):
+					self.type = image('damage')
 			
 			if keys[pygame.K_m]:
 				self.type = image('attack',self.flip)
+				pygame.mixer.Channel(1).play(self.attack_sound)
+
 				
         
 				
@@ -305,7 +323,7 @@ class Player(pygame.sprite.Sprite):
 		if self.rect.left < 200 :
 			self.rect.left = 200
 		# dsfsdf 
-		if self.rect.right > 1000 : 
+		if self.rect.right > 1000 :
 			self.rect.right = 1000
 
 
@@ -345,10 +363,10 @@ class Obstacle(pygame.sprite.Sprite):
 	def update(self):
            #get keypresses
 		key = pygame.key.get_pressed()
-		if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
-			self.rect.x += 5
-		if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
-			self.rect.x -= 5
+		# if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
+		# 	self.rect.x += 5
+		# if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
+		# 	self.rect.x -= 5
  
 		if key[pygame.K_LEFT] and player_level_2.sprite.rect.left < 201 and scroll > 0:           # 555555555555555555
 			self.rect.x += 5
@@ -373,10 +391,10 @@ class Objects_to_draw(pygame.sprite.Sprite):
 	def update(self):
            #get keypresses
 		key = pygame.key.get_pressed()
-		if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
-			self.rect.x += 5
-		if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
-			self.rect.x -= 5
+		# if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
+		# 	self.rect.x += 5
+		# if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
+		# 	self.rect.x -= 5
 
 		if key[pygame.K_LEFT] and player_level_2.sprite.rect.left < 201 and scroll > 0:      # 555555555555555555
 			self.rect.x += 5
@@ -414,10 +432,10 @@ class Monsters(pygame.sprite.Sprite):
 	def update(self):
            #get keypresses
 		key = pygame.key.get_pressed()
-		if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
-			self.rect.x += 5
-		if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
-			self.rect.x -= 5
+		# if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
+		# 	self.rect.x += 5
+		# if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
+		# 	self.rect.x -= 5
 
 		if key[pygame.K_LEFT] and player_level_2.sprite.rect.left < 201 and scroll > 0:          # 555555555555555555
 			self.rect.x += 5
@@ -446,16 +464,16 @@ class Monsters(pygame.sprite.Sprite):
 			self.image = pygame.transform.flip(self.image, True,False)
 
 		current_time = pygame.time.get_ticks()
-		if key[pygame.K_RSHIFT] and player.sprite.rect.colliderect(self.rect) and  current_time - player.sprite.last_update >= player.sprite.hit_cooldown:
-			if self.t == "eater" :
-				self.type = image('eater_damage')
-				pygame.mixer.Channel(8).play(self.death_sound)
-				self.death = True
+		# if key[pygame.K_RSHIFT] and player.sprite.rect.colliderect(self.rect) and  current_time - player.sprite.last_update >= player.sprite.hit_cooldown:
+		# 	if self.t == "eater" :
+		# 		self.type = image('eater_damage')
+		# 		pygame.mixer.Channel(8).play(self.death_sound)
+		# 		self.death = True
 
 		if key[pygame.K_RSHIFT] and player_level_2.sprite.rect.colliderect(self.rect) and  current_time - player_level_2.sprite.last_update >= player_level_2.sprite.hit_cooldown:
 			if self.t == "eater" :
 				self.type = image('eater_damage')        # 555555555555555555
-				# pygame.mixer.Channel(8).play(self.death_sound)
+				pygame.mixer.Channel(8).play(self.death_sound)
 				self.death = True
 
 
@@ -487,10 +505,10 @@ class coins(pygame.sprite.Sprite):
 	def update(self):
            #get keypresses
 		key = pygame.key.get_pressed()
-		if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
-			self.rect.x += 5
-		if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
-			self.rect.x -= 5
+		# if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
+		# 	self.rect.x += 5
+		# if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
+		# 	self.rect.x -= 5
 
 		
 		if key[pygame.K_LEFT] and player_level_2.sprite.rect.left < 201 and scroll > 0:       # 555555555555555555
@@ -505,18 +523,18 @@ class coins(pygame.sprite.Sprite):
 			self.animation_index = 0
 		
 		global coil_count 
-		if player.sprite.rect.colliderect(self.rect):
-			pygame.mixer.Channel(2).play(self.get_damage)
-			self.kill()
-			coil_count += 1
+		# if player.sprite.rect.colliderect(self.rect):
+		# 	pygame.mixer.Channel(2).play(self.get_damage)
+		# 	self.kill()
+		# 	coil_count += 1
 
-		if player_2.sprite.rect.colliderect(self.rect):      
-			pygame.mixer.Channel(3).play(self.get_damage)
-			self.kill()
-			coil_count += 1 
+		# if player_2.sprite.rect.colliderect(self.rect):      
+		# 	pygame.mixer.Channel(3).play(self.get_damage)
+		# 	self.kill()
+		# 	coil_count += 1 
 
 		if player_level_2.sprite.rect.colliderect(self.rect):    #5555555     
-			# pygame.mixer.Channel(3).play(self.get_damage)
+			pygame.mixer.Channel(2).play(self.get_damage)
 			self.kill()
 			coil_count += 1 
 
@@ -540,9 +558,14 @@ class key(pygame.sprite.Sprite):
 	def update(self):
            #get keypresses
 		key = pygame.key.get_pressed()
-		if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
+		# if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
+		# 	self.rect.x += 5
+		# if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
+		# 	self.rect.x -= 5
+
+		if key[pygame.K_LEFT] and player_level_2.sprite.rect.left < 201 and scroll > 0:
 			self.rect.x += 5
-		if key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
+		if key[pygame.K_RIGHT] and player_level_2.sprite.rect.right > 999 and scroll < 3000:
 			self.rect.x -= 5
 		
 
@@ -552,57 +575,62 @@ class key(pygame.sprite.Sprite):
 			self.animation_index = 0
 		
 		global not_having_key
-		if player.sprite.rect.colliderect(self.rect):
-			not_having_key = False
-			self.kill()
+		# if player.sprite.rect.colliderect(self.rect):
+		# 	not_having_key = False
+		# 	self.kill()
 			
 
-		if player_2.sprite.rect.colliderect(self.rect):
+		# if player_2.sprite.rect.colliderect(self.rect):
+		# 	not_having_key = False
+		# 	self.kill()
+				
+		if player_level_2.sprite.rect.colliderect(self.rect):
 			not_having_key = False
 			self.kill()
-				
+
+
 def collide():
 	
-	for i in range(len(objects.sprites())):
-		if objects.sprites()[i].rect.colliderect(player.sprite.rect): 
-			if player.sprite.x_velocity < 0  and player.sprite.on_ground == False:
-				# player.sprite.rect.left = objects.sprites()[i].rect.right
-				player.sprite.x_velocity = 0
+	# for i in range(len(objects.sprites())):
+	# 	if objects.sprites()[i].rect.colliderect(player.sprite.rect): 
+	# 		if player.sprite.x_velocity < 0  and player.sprite.on_ground == False:
+	# 			# player.sprite.rect.left = objects.sprites()[i].rect.right
+	# 			player.sprite.x_velocity = 0
 
-			if player.sprite.x_velocity > 0 and player.sprite.on_ground == False:
-				# player.sprite.rect.right = objects.sprites()[i].rect.left
-				player.sprite.x_velocity = 0
-
-
-			if player.sprite.y_velocity > 0 : 
-				player.sprite.rect.bottom = objects.sprites()[i].rect.top 
-				player.sprite.y_velocity = 0 
-				player.sprite.on_ground = True
-
-			if player.sprite.y_velocity < 0 : 
-				player.sprite.rect.top = objects.sprites()[i].rect.bottom 
-				player.sprite.y_velocity = 0
-				player.sprite.on_ground = False
-
-		if objects.sprites()[i].rect.colliderect(player_2.sprite.rect): 
-			if player_2.sprite.x_velocity < 0  and player_2.sprite.on_ground == False:
-				# player.sprite.rect.left = objects.sprites()[i].rect.right
-				player_2.sprite.x_velocity = 0
-
-			if player_2.sprite.x_velocity > 0 and player_2.sprite.on_ground == False:
-				# player.sprite.rect.right = objects.sprites()[i].rect.left
-				player_2.sprite.x_velocity = 0
+	# 		if player.sprite.x_velocity > 0 and player.sprite.on_ground == False:
+	# 			# player.sprite.rect.right = objects.sprites()[i].rect.left
+	# 			player.sprite.x_velocity = 0
 
 
-			if player_2.sprite.y_velocity > 0 :
-				player_2.sprite.rect.bottom = objects.sprites()[i].rect.top
-				player_2.sprite.y_velocity = 0 
-				player_2.sprite.on_ground = True
+	# 		if player.sprite.y_velocity > 0 : 
+	# 			player.sprite.rect.bottom = objects.sprites()[i].rect.top 
+	# 			player.sprite.y_velocity = 0 
+	# 			player.sprite.on_ground = True
 
-			if player_2.sprite.y_velocity < 0 : 
-				player_2.sprite.rect.top = objects.sprites()[i].rect.bottom 
-				player_2.sprite.y_velocity = 0
-				player_2.sprite.on_ground = False
+	# 		if player.sprite.y_velocity < 0 : 
+	# 			player.sprite.rect.top = objects.sprites()[i].rect.bottom 
+	# 			player.sprite.y_velocity = 0
+	# 			player.sprite.on_ground = False
+
+	# 	if objects.sprites()[i].rect.colliderect(player_2.sprite.rect): 
+	# 		if player_2.sprite.x_velocity < 0  and player_2.sprite.on_ground == False:
+	# 			# player.sprite.rect.left = objects.sprites()[i].rect.right
+	# 			player_2.sprite.x_velocity = 0
+
+	# 		if player_2.sprite.x_velocity > 0 and player_2.sprite.on_ground == False:
+	# 			# player.sprite.rect.right = objects.sprites()[i].rect.left
+	# 			player_2.sprite.x_velocity = 0
+
+
+	# 		if player_2.sprite.y_velocity > 0 :
+	# 			player_2.sprite.rect.bottom = objects.sprites()[i].rect.top
+	# 			player_2.sprite.y_velocity = 0 
+	# 			player_2.sprite.on_ground = True
+
+	# 		if player_2.sprite.y_velocity < 0 : 
+	# 			player_2.sprite.rect.top = objects.sprites()[i].rect.bottom 
+	# 			player_2.sprite.y_velocity = 0
+	# 			player_2.sprite.on_ground = False
 
 	for i in range(len(objects_level_2.sprites())):	                              #5555555555
 		if objects_level_2.sprites()[i].rect.colliderect(player_level_2.sprite.rect): 
@@ -630,11 +658,17 @@ def collide():
 		
 
 	current_time = pygame.time.get_ticks()
-	for i in range(len(monsters.sprites())):
-		if monsters.sprites()[i].rect.colliderect(player.sprite.rect) and not(key[pygame.K_RSHIFT]) and current_time - player.sprite.last_update >= player.sprite.hit_cooldown:
-			player.sprite.last_update = current_time
-			health.sprite.index += 1
-			pygame.mixer.Channel(4).play(player.sprite.damage)
+	# for i in range(len(monsters.sprites())):
+	# 	if monsters.sprites()[i].rect.colliderect(player.sprite.rect) and not(key[pygame.K_RSHIFT]) and current_time - player.sprite.last_update >= player.sprite.hit_cooldown:
+	# 		player.sprite.last_update = current_time
+	# 		health.sprite.index += 1
+	# 		pygame.mixer.Channel(4).play(player.sprite.damage)
+
+	for i in range(len(monsters_level_2.sprites())):
+		if monsters_level_2.sprites()[i].rect.colliderect(player_level_2.sprite.rect) and not(key[pygame.K_RSHIFT]) and current_time - player_level_2.sprite.last_update >= player_level_2.sprite.hit_cooldown:
+			player_level_2.sprite.last_update = current_time
+			# health.sprite.index += 1
+			pygame.mixer.Channel(4).play(player_level_2.sprite.damage)
 			
 
 	global key_count
@@ -670,11 +704,11 @@ pause_or_not = False
 # groups         these groups should be in the level class 
 
 # player
-player = pygame.sprite.GroupSingle()
-player.add(Player('player_1'))
+# player = pygame.sprite.GroupSingle()
+# player.add(Player('player_1'))
 
-player_2 = pygame.sprite.GroupSingle()
-player_2.add(Player('player_2'))
+# player_2 = pygame.sprite.GroupSingle()
+# player_2.add(Player('player_2'))
 
 # for level two
 player_level_2 = pygame.sprite.GroupSingle()
@@ -683,26 +717,26 @@ player_level_2.add(Player('player_level_2'))
 coil_count = 0
 
 # objects that the player collides with
-objects = pygame.sprite.Group()
-for i in range(3):
-	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
-objects.add(Obstacle('land',1300, SCREEN_HEIGHT-150))
-objects.add(Obstacle('land',1820, SCREEN_HEIGHT-320))
-objects.add(Obstacle("big_land",2730,SCREEN_HEIGHT+600))
-objects.add(Obstacle('land',(ground_width * 10)+20, SCREEN_HEIGHT-220))
-for i in range(11,13):
-	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
-objects.add(Obstacle('land',(ground_width * 13)+70, SCREEN_HEIGHT-150))
-objects.add(Obstacle('land',(ground_width * 15)-50, SCREEN_HEIGHT-150))
-for i in range(16,20):
-	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
-objects.add(Obstacle('land',(ground_width * 2)+50, SCREEN_HEIGHT-340))
-objects.add(Obstacle('land_2',(ground_width * 16)+100, SCREEN_HEIGHT-350))
-objects.add(Obstacle('land_2',(ground_width * 17)+100, SCREEN_HEIGHT-350))
-objects.add(Obstacle('land_2',(ground_width * 18)+100, SCREEN_HEIGHT-350))
-objects.add(Obstacle('land_3',(ground_width * 18)+500, SCREEN_HEIGHT-300))
-objects.add(Obstacle('land_3',(ground_width * 18)+800, SCREEN_HEIGHT-450))
-objects.add(Obstacle('land_3',(ground_width * 18)+1100, SCREEN_HEIGHT-450))
+# objects = pygame.sprite.Group()
+# for i in range(3):
+# 	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
+# objects.add(Obstacle('land',1300, SCREEN_HEIGHT-150))
+# objects.add(Obstacle('land',1820, SCREEN_HEIGHT-320))
+# objects.add(Obstacle("big_land",2730,SCREEN_HEIGHT+600))
+# objects.add(Obstacle('land',(ground_width * 10)+20, SCREEN_HEIGHT-220))
+# for i in range(11,13):
+# 	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
+# objects.add(Obstacle('land',(ground_width * 13)+70, SCREEN_HEIGHT-150))
+# objects.add(Obstacle('land',(ground_width * 15)-50, SCREEN_HEIGHT-150))
+# for i in range(16,20):
+# 	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
+# objects.add(Obstacle('land',(ground_width * 2)+50, SCREEN_HEIGHT-340))
+# objects.add(Obstacle('land_2',(ground_width * 16)+100, SCREEN_HEIGHT-350))
+# objects.add(Obstacle('land_2',(ground_width * 17)+100, SCREEN_HEIGHT-350))
+# objects.add(Obstacle('land_2',(ground_width * 18)+100, SCREEN_HEIGHT-350))
+# objects.add(Obstacle('land_3',(ground_width * 18)+500, SCREEN_HEIGHT-300))
+# objects.add(Obstacle('land_3',(ground_width * 18)+800, SCREEN_HEIGHT-450))
+# objects.add(Obstacle('land_3',(ground_width * 18)+1100, SCREEN_HEIGHT-450))
 
 
 # for level two
@@ -726,82 +760,87 @@ for i in range(6,9):
 # objects_level_2.add(Obstacle('black_box',300/2 + (16 * 300)+120,SCREEN_HEIGHT+65))
 objects_level_2.add(Obstacle('black_box',150,SCREEN_HEIGHT+60))
 objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (5 * ground_2_width) - 130,SCREEN_HEIGHT-350))
-objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (5 * ground_2_width) - 550,SCREEN_HEIGHT-400))
+objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (5 * ground_2_width) - 550,SCREEN_HEIGHT-450))
 objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (13 * ground_2_width) - 170,SCREEN_HEIGHT-200))
 objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (13 * ground_2_width) +300,SCREEN_HEIGHT-280))
 objects_level_2.add(Obstacle('floating_land',ground_2_width/2 + (13 * ground_2_width) +850,SCREEN_HEIGHT-350))
 objects_level_2.add(Obstacle('last_wall',ground_2_width/2 + (19 * ground_2_width)+200,SCREEN_HEIGHT))
 objects_level_2.add(Obstacle('black_box',ground_2_width/2 + (19 * ground_2_width)+100,SCREEN_HEIGHT))
 objects_level_2.add(Obstacle('black_box',ground_2_width/2 + (19 * ground_2_width)+100,SCREEN_HEIGHT-80))
+objects_level_2.add(Obstacle('small_land',ground_2_width/2 + (16 * ground_2_width) -50,SCREEN_HEIGHT+20))
+objects_level_2.add(Obstacle('small_land',ground_2_width/2 + (16 * ground_2_width) -300,SCREEN_HEIGHT-150))
 # objects_level_2.add(Obstacle('black_box',ground_2_width/2 + (19 * ground_2_width)+100,SCREEN_HEIGHT-140))
 
 
 # monsters 
-monsters = pygame.sprite.Group()
-monsters.add(Monsters('eater',objects.sprites()[2].rect.x,objects.sprites()[2].rect.top,300,3,2))
-monsters.add(Monsters('eater',objects.sprites()[3].rect.x,objects.sprites()[3].rect.top,300,4,3))
-monsters.add(Monsters('eater',objects.sprites()[4].rect.x,objects.sprites()[4].rect.top,300,4,4))
-monsters.add(Monsters('flying',objects.sprites()[5].rect.x,objects.sprites()[5].rect.top,1000,2,5))
-monsters.add(Monsters('slime',objects.sprites()[5].rect.x,objects.sprites()[5].rect.top,1000,4,5))
-monsters.add(Monsters('eater',objects.sprites()[5].rect.x,objects.sprites()[5].rect.top,1000,3,5))
-monsters.add(Monsters('eater',objects.sprites()[6].rect.x,objects.sprites()[6].rect.top,300,3,6))
-monsters.add(Monsters('flying',objects.sprites()[7].rect.x,objects.sprites()[7].rect.top,620,2,7))
-monsters.add(Monsters('slime',objects.sprites()[7].rect.x,objects.sprites()[7].rect.top,620,4,7))
-monsters.add(Monsters('slime',objects.sprites()[9].rect.x,objects.sprites()[9].rect.top,300,4,9))
-monsters.add(Monsters('eater',objects.sprites()[10].rect.x,objects.sprites()[10].rect.top,300,3,10))
-monsters.add(Monsters('flying',objects.sprites()[11].rect.x,objects.sprites()[11].rect.top,650,2,11))
-monsters.add(Monsters('slime',objects.sprites()[11].rect.x,objects.sprites()[11].rect.top,650,5,11))
-monsters.add(Monsters('flying',objects.sprites()[13].rect.x,objects.sprites()[13].rect.top,500,2,13))
-monsters.add(Monsters('slime',objects.sprites()[13].rect.x,objects.sprites()[13].rect.top,500,5,13))
-monsters.add(Monsters('slime',objects.sprites()[15].rect.x,objects.sprites()[15].rect.top,300,4,15))
+# monsters = pygame.sprite.Group()
+# monsters.add(Monsters('eater',objects.sprites()[2].rect.x,objects.sprites()[2].rect.top,300,3,2))
+# monsters.add(Monsters('eater',objects.sprites()[3].rect.x,objects.sprites()[3].rect.top,300,4,3))
+# monsters.add(Monsters('eater',objects.sprites()[4].rect.x,objects.sprites()[4].rect.top,300,4,4))
+# monsters.add(Monsters('flying',objects.sprites()[5].rect.x,objects.sprites()[5].rect.top,1000,2,5))
+# monsters.add(Monsters('slime',objects.sprites()[5].rect.x,objects.sprites()[5].rect.top,1000,4,5))
+# monsters.add(Monsters('eater',objects.sprites()[5].rect.x,objects.sprites()[5].rect.top,1000,3,5))
+# monsters.add(Monsters('eater',objects.sprites()[6].rect.x,objects.sprites()[6].rect.top,300,3,6))
+# monsters.add(Monsters('flying',objects.sprites()[7].rect.x,objects.sprites()[7].rect.top,620,2,7))
+# monsters.add(Monsters('slime',objects.sprites()[7].rect.x,objects.sprites()[7].rect.top,620,4,7))
+# monsters.add(Monsters('slime',objects.sprites()[9].rect.x,objects.sprites()[9].rect.top,300,4,9))
+# monsters.add(Monsters('eater',objects.sprites()[10].rect.x,objects.sprites()[10].rect.top,300,3,10))
+# monsters.add(Monsters('flying',objects.sprites()[11].rect.x,objects.sprites()[11].rect.top,650,2,11))
+# monsters.add(Monsters('slime',objects.sprites()[11].rect.x,objects.sprites()[11].rect.top,650,5,11))
+# monsters.add(Monsters('flying',objects.sprites()[13].rect.x,objects.sprites()[13].rect.top,500,2,13))
+# monsters.add(Monsters('slime',objects.sprites()[13].rect.x,objects.sprites()[13].rect.top,500,5,13))
+# monsters.add(Monsters('slime',objects.sprites()[15].rect.x,objects.sprites()[15].rect.top,300,4,15))
 
 # for level two
 monsters_level_2 = pygame.sprite.Group()
-monsters_level_2.add(Monsters('eater',objects_level_2.sprites()[2].rect.x,objects_level_2.sprites()[2].rect.top,1000,4,2))
-monsters_level_2.add(Monsters('slime',objects_level_2.sprites()[2].rect.x + 900,objects_level_2.sprites()[2].rect.top,1000,5,2))
+monsters_level_2.add(Monsters('wispy',objects_level_2.sprites()[1].rect.x +900 ,objects_level_2.sprites()[1].rect.top,1000,5,1))
+monsters_level_2.add(Monsters('ghost',objects_level_2.sprites()[40].rect.x ,objects_level_2.sprites()[40].rect.top-5,250,2,40))
 monsters_level_2.add(Monsters('flying',objects_level_2.sprites()[6].rect.x  ,objects_level_2.sprites()[6].rect.top ,800,3,6))
-monsters_level_2.add(Monsters('eater',objects_level_2.sprites()[9].rect.x  ,objects_level_2.sprites()[9].rect.top ,800,3,9))
-monsters_level_2.add(Monsters('slime',objects_level_2.sprites()[42].rect.x ,objects_level_2.sprites()[42].rect.top,220,4,42))
-monsters_level_2.add(Monsters('slime',objects_level_2.sprites()[43].rect.x ,objects_level_2.sprites()[43].rect.top,220,4,43))
-monsters_level_2.add(Monsters('slime',objects_level_2.sprites()[44].rect.x ,objects_level_2.sprites()[44].rect.top,220,4,44))
+monsters_level_2.add(Monsters('wispy',objects_level_2.sprites()[9].rect.x +100 ,objects_level_2.sprites()[1].rect.top-20,800,5,9))
+
+monsters_level_2.add(Monsters('ghost',objects_level_2.sprites()[42].rect.x ,objects_level_2.sprites()[42].rect.top-10,220,4,42))
+monsters_level_2.add(Monsters('ghost',objects_level_2.sprites()[43].rect.x +100 ,objects_level_2.sprites()[43].rect.top-10,220,4,43))
+monsters_level_2.add(Monsters('ghost',objects_level_2.sprites()[44].rect.x +150 ,objects_level_2.sprites()[44].rect.top-10,220,4,44))
+monsters_level_2.add(Monsters('wispy',objects_level_2.sprites()[44].rect.x  ,objects_level_2.sprites()[44].rect.top + 350,400,5,44))
 
 
 
-coin = pygame.sprite.Group()
-coin.add(coins('coin',objects.sprites()[15].rect.x +20 ,objects.sprites()[15].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[15].rect.x + 170 ,objects.sprites()[15].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[15].rect.x + 300 ,objects.sprites()[15].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[3].rect.x + 400 ,objects.sprites()[3].rect.y - 80))
-coin.add(coins('coin',objects.sprites()[4].rect.x + 410 ,objects.sprites()[4].rect.y - 80))
-coin.add(coins('coin',objects.sprites()[5].rect.x + 180 ,objects.sprites()[5].rect.y - 150))
-coin.add(coins('coin',objects.sprites()[5].rect.x + 380 ,objects.sprites()[5].rect.y - 20))
-coin.add(coins('coin',objects.sprites()[5].rect.x + 580 ,objects.sprites()[5].rect.y - 150))
-coin.add(coins('coin',objects.sprites()[5].rect.x + 780 ,objects.sprites()[5].rect.y - 20))
-coin.add(coins('coin',objects.sprites()[5].rect.x + 980 ,objects.sprites()[5].rect.y - 150))
-coin.add(coins('coin',objects.sprites()[6].rect.x + 160 ,objects.sprites()[6].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[7].rect.x + 50 ,objects.sprites()[7].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[7].rect.x + 350 ,objects.sprites()[7].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[7].rect.x + 600 ,objects.sprites()[7].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[9].rect.x + 160 ,objects.sprites()[9].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[9].rect.x + 450 ,objects.sprites()[9].rect.y - 150))
-coin.add(coins('coin',objects.sprites()[10].rect.x + 160 ,objects.sprites()[10].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[11].rect.x + 160 ,objects.sprites()[11].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[12].rect.x + 160 ,objects.sprites()[12].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[13].rect.x + 160 ,objects.sprites()[13].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[14].rect.x + 160 ,objects.sprites()[14].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[16].rect.x + 20 ,objects.sprites()[16].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[17].rect.x + 20 ,objects.sprites()[17].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[18].rect.x + 20 ,objects.sprites()[18].rect.y - 40))
-coin.add(coins('coin',objects.sprites()[21].rect.x + 1000 ,objects.sprites()[21].rect.y - 20))
+
+# coin = pygame.sprite.Group()
+# coin.add(coins('coin',objects.sprites()[15].rect.x +20 ,objects.sprites()[15].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[15].rect.x + 170 ,objects.sprites()[15].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[15].rect.x + 300 ,objects.sprites()[15].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[3].rect.x + 400 ,objects.sprites()[3].rect.y - 80))
+# coin.add(coins('coin',objects.sprites()[4].rect.x + 410 ,objects.sprites()[4].rect.y - 80))
+# coin.add(coins('coin',objects.sprites()[5].rect.x + 180 ,objects.sprites()[5].rect.y - 150))
+# coin.add(coins('coin',objects.sprites()[5].rect.x + 380 ,objects.sprites()[5].rect.y - 20))
+# coin.add(coins('coin',objects.sprites()[5].rect.x + 580 ,objects.sprites()[5].rect.y - 150))
+# coin.add(coins('coin',objects.sprites()[5].rect.x + 780 ,objects.sprites()[5].rect.y - 20))
+# coin.add(coins('coin',objects.sprites()[5].rect.x + 980 ,objects.sprites()[5].rect.y - 150))
+# coin.add(coins('coin',objects.sprites()[6].rect.x + 160 ,objects.sprites()[6].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[7].rect.x + 50 ,objects.sprites()[7].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[7].rect.x + 350 ,objects.sprites()[7].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[7].rect.x + 600 ,objects.sprites()[7].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[9].rect.x + 160 ,objects.sprites()[9].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[9].rect.x + 450 ,objects.sprites()[9].rect.y - 150))
+# coin.add(coins('coin',objects.sprites()[10].rect.x + 160 ,objects.sprites()[10].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[11].rect.x + 160 ,objects.sprites()[11].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[12].rect.x + 160 ,objects.sprites()[12].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[13].rect.x + 160 ,objects.sprites()[13].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[14].rect.x + 160 ,objects.sprites()[14].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[16].rect.x + 20 ,objects.sprites()[16].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[17].rect.x + 20 ,objects.sprites()[17].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[18].rect.x + 20 ,objects.sprites()[18].rect.y - 40))
+# coin.add(coins('coin',objects.sprites()[21].rect.x + 1000 ,objects.sprites()[21].rect.y - 20))
 
 # for level 2
 coin_level_2 = pygame.sprite.Group()
 coin_level_2.add(coins('coin',objects_level_2.sprites()[1].rect.x +100 ,objects_level_2.sprites()[2].rect.y -10))
 coin_level_2.add(coins('coin',objects_level_2.sprites()[2].rect.x +180 ,objects_level_2.sprites()[2].rect.y -10))
 coin_level_2.add(coins('coin',objects_level_2.sprites()[3].rect.x +180,objects_level_2.sprites()[2].rect.y -10))
-coin_level_2.add(coins('coin',objects_level_2.sprites()[3].rect.x +120,objects_level_2.sprites()[2].rect.y -350))
 coin_level_2.add(coins('coin',objects_level_2.sprites()[4].rect.x +180,objects_level_2.sprites()[2].rect.y -10))
 coin_level_2.add(coins('coin',objects_level_2.sprites()[40].rect.x+ 140,objects_level_2.sprites()[40].rect.y -10))
+coin_level_2.add(coins('coin',objects_level_2.sprites()[41].rect.x +140,objects_level_2.sprites()[41].rect.y -10))
 
 
 
@@ -820,37 +859,39 @@ coin_level_2.add(coins('coin',objects_level_2.sprites()[9].rect.x +20 ,objects_l
 coin_level_2.add(coins('coin',objects_level_2.sprites()[9].rect.x +320 ,objects_level_2.sprites()[9].rect.y -10))
 coin_level_2.add(coins('coin',objects_level_2.sprites()[9].rect.x +620 ,objects_level_2.sprites()[9].rect.y -10))
 
-keys = pygame.sprite.GroupSingle()
-keys.add(key('key',objects.sprites()[21].rect.x + 5 ,objects.sprites()[21].rect.y - 20))
+# keys = pygame.sprite.GroupSingle()
+# keys.add(key('key',objects.sprites()[21].rect.x + 5 ,objects.sprites()[21].rect.y - 20))
+
+# for level two
+keys_level_2 = pygame.sprite.GroupSingle()
+keys_level_2.add(key('key',objects_level_2.sprites()[44].rect.x +100 ,objects_level_2.sprites()[44].rect.y + 300))
 
 
 
-
-
-# objects just to be drown
-objects_d = pygame.sprite.Group()
-objects_d.add(Objects_to_draw('tree',250,SCREEN_HEIGHT-ground_height+20))
-objects_d.add(Objects_to_draw('door',(ground_width * 19)+130,SCREEN_HEIGHT - ground_height+20))
+# # objects just to be drown
+# objects_d = pygame.sprite.Group()
+# objects_d.add(Objects_to_draw('tree',250,SCREEN_HEIGHT-ground_height+20))
+# objects_d.add(Objects_to_draw('door',(ground_width * 19)+130,SCREEN_HEIGHT - ground_height+20))
 
 # for level two
 objects_d_level_2 = pygame.sprite.Group()
 for i in range(2):
 	objects_d_level_2.add(Objects_to_draw('wall',6000 * i ,750))
-objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[2].rect.x -200,objects.sprites()[2].rect.y - 180))
-objects_d_level_2.add(Objects_to_draw('cell',objects_level_2.sprites()[2].rect.x +10,objects.sprites()[2].rect.y-70))
-objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[2].rect.x +220,objects.sprites()[2].rect.y - 180))
-objects_d_level_2.add(Objects_to_draw('cell',objects_level_2.sprites()[2].rect.x +430,objects.sprites()[2].rect.y-70))
-objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[2].rect.x +640,objects.sprites()[2].rect.y - 180))
-objects_d_level_2.add(Objects_to_draw('cell',objects_level_2.sprites()[2].rect.x +850,objects.sprites()[2].rect.y-70))
-objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[2].rect.x +1060,objects.sprites()[2].rect.y - 180))
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[2].rect.x -200,objects_level_2.sprites()[2].rect.y - 130))
+objects_d_level_2.add(Objects_to_draw('cell',objects_level_2.sprites()[2].rect.x +10,objects_level_2.sprites()[2].rect.y))
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[2].rect.x +220,objects_level_2.sprites()[2].rect.y - 130))
+objects_d_level_2.add(Objects_to_draw('cell',objects_level_2.sprites()[2].rect.x +430,objects_level_2.sprites()[2].rect.y))
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[2].rect.x +640,objects_level_2.sprites()[2].rect.y - 130))
+objects_d_level_2.add(Objects_to_draw('cell',objects_level_2.sprites()[2].rect.x +850,objects_level_2.sprites()[2].rect.y))
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[2].rect.x +1060,objects_level_2.sprites()[2].rect.y - 130))
 
-objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[7].rect.x - 10,objects.sprites()[7].rect.y -230))
-objects_d_level_2.add(Objects_to_draw('Door',objects_level_2.sprites()[7].rect.x +150,objects.sprites()[7].rect.y-160))
-objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[7].rect.x +310,objects.sprites()[7].rect.y -230))
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[7].rect.x - 10,objects_level_2.sprites()[7].rect.y -100))
+objects_d_level_2.add(Objects_to_draw('Door',objects_level_2.sprites()[7].rect.x +150,objects_level_2.sprites()[7].rect.y))
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[7].rect.x +310,objects_level_2.sprites()[7].rect.y -100))
 
-objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[10].rect.x ,objects.sprites()[10].rect.y ))
-objects_d_level_2.add(Objects_to_draw('cell',objects_level_2.sprites()[10].rect.x +210,objects.sprites()[10].rect.y + 100))
-objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[10].rect.x +440,objects.sprites()[10].rect.y))
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[10].rect.x -20,objects_level_2.sprites()[10].rect.y -130))
+objects_d_level_2.add(Objects_to_draw('cell',objects_level_2.sprites()[10].rect.x +190,objects_level_2.sprites()[10].rect.y))
+objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[10].rect.x +420,objects_level_2.sprites()[10].rect.y-130))
 
 objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[43].rect.x -380 ,objects_level_2.sprites()[43].rect.y -100))
 objects_d_level_2.add(Objects_to_draw('torch',objects_level_2.sprites()[43].rect.x +120 ,objects_level_2.sprites()[43].rect.y -100))
@@ -870,7 +911,7 @@ health = pygame.sprite.GroupSingle()
 health.add(Health("healthbar"))
 		
 
-back_ground_ = pygame.mixer.Sound("assets\\audio\Kim Lightyear - The Final.mp3")
+back_ground_ = pygame.mixer.Sound("assets\\audio\\b_Level1.ogg")
 back_ground_.set_volume(0.1)
 
 not_having_key = True
@@ -898,10 +939,10 @@ while run:
 			pause_menu.pause_game_draw(screen)
 		else:
 			key = pygame.key.get_pressed()
-			if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
-				scroll -= 2
-			elif key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
-				scroll += 2
+			# if key[pygame.K_LEFT] and player.sprite.rect.left < 201 and scroll > 0:
+			# 	scroll -= 2
+			# elif key[pygame.K_RIGHT] and player.sprite.rect.right > 999 and scroll < 3000:
+			# 	scroll += 2
 
 			if key[pygame.K_LEFT] and player_level_2.sprite.rect.left < 201 and scroll > 0:
 				scroll -= 2
@@ -936,14 +977,16 @@ while run:
 			coin_level_2.draw(screen)
 			# keys.update()
 			# keys.draw(screen)
+			keys_level_2.update()
+			keys_level_2.draw(screen)
 			# player.update() 
 			# player.draw(screen) 
 			player_level_2.update() 
 			player_level_2.draw(screen)
 			# player_2.update() 
 			# player_2.draw(screen) 
-			# health.update()
-			# health.draw(screen)
+			health.update()
+			health.draw(screen)
 			collide()
 			# print(len(objects_level_2.sprites()))
 			
@@ -965,8 +1008,11 @@ while run:
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE or  health.sprite.index == 4:       #  i edited this lineeeeeeeeeee
 					pause_or_not = True
-				if  player.sprite.rect.y > SCREEN_HEIGHT + 100:            #  i edited this lineeeeeeeeeee
-					pause_or_not = True                              #  i edited this lineeeeeeeeeee
+				# if  player.sprite.rect.y > SCREEN_HEIGHT + 100:            #  i edited this lineeeeeeeeeee
+				# 	pause_or_not = True                              #  i edited this lineeeeeeeeeee
+
+				if  player_level_2.sprite.rect.y > SCREEN_HEIGHT + 100:            #  i edited this lineeeeeeeeeee
+					pause_or_not = True    
 			if pause_menu.resume_button.button_clicked(event):
 				pause_or_not = False
 			if pause_menu.quit_button.button_clicked(event):
