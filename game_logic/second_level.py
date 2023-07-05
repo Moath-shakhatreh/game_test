@@ -24,6 +24,9 @@ ground_image = pygame.image.load("assets\Parallax\\aliens_ground_04-modified.png
 ground_width = ground_image.get_width()
 ground_height = ground_image.get_height()
 
+
+
+#####################
 bg_images = []
 for i in range(1, 4):
 #   bg_image = pygame.image.load(f"assets\Parallax/{i}.png").convert_alpha()
@@ -33,17 +36,21 @@ for i in range(1, 4):
 bg_width = bg_images[0].get_width()
 
 
-
-
 def draw_bg():
   for x in range(11):
     speed = 1
     for i in bg_images:
       screen.blit(i, ((x * bg_width) - scroll * speed, 0))
       speed += 0.1
+#######################
 
-		
- 
+
+
+
+
+
+
+
 
 def image(direction,flip = False):
 	if direction == "idel":
@@ -333,7 +340,7 @@ class Health(pygame.sprite.Sprite):
 		self.type= image(type)
 		self.index = 0
 		self.image = self.type[self.index]
-		self.rect = self.image.get_rect(topleft = (50,50))
+		self.rect = self.image.get_rect(topleft = (50,70))
 		self.last_update = pygame.time.get_ticks()
 		self.hit_cooldown = 1500
 		0
@@ -667,7 +674,7 @@ def collide():
 	for i in range(len(monsters_level_2.sprites())):
 		if monsters_level_2.sprites()[i].rect.colliderect(player_level_2.sprite.rect) and not(key[pygame.K_RSHIFT]) and current_time - player_level_2.sprite.last_update >= player_level_2.sprite.hit_cooldown:
 			player_level_2.sprite.last_update = current_time
-			# health.sprite.index += 1
+			health.sprite.index += 1
 			pygame.mixer.Channel(4).play(player_level_2.sprite.damage)
 			
 
@@ -676,11 +683,11 @@ def collide():
 	key_sound.set_volume(0.5)
 	if not_having_key :
 		image__ = pygame.image.load((f"assets\Parallax\\not_having_key-modified.png")).convert_alpha()
-		screen.blit(image__,(300,50))
+		screen.blit(image__,(300,70))
 				
 	if not_having_key == False and key_count == 1:
 		image__ = pygame.image.load((f"assets\Parallax\having_key-modified.png")).convert_alpha()
-		screen.blit(image__,(300,50))
+		screen.blit(image__,(300,70))
 		pygame.mixer.Channel(5).play(key_sound)
 		key_count += 1
 		
@@ -793,7 +800,7 @@ objects_level_2.add(Obstacle('small_land',ground_2_width/2 + (16 * ground_2_widt
 
 # for level two
 monsters_level_2 = pygame.sprite.Group()
-monsters_level_2.add(Monsters('wispy',objects_level_2.sprites()[1].rect.x +900 ,objects_level_2.sprites()[1].rect.top,1000,5,1))
+monsters_level_2.add(Monsters('wispy',objects_level_2.sprites()[2].rect.x  ,objects_level_2.sprites()[2].rect.top,700,5,2))
 monsters_level_2.add(Monsters('ghost',objects_level_2.sprites()[40].rect.x ,objects_level_2.sprites()[40].rect.top-5,250,2,40))
 monsters_level_2.add(Monsters('flying',objects_level_2.sprites()[6].rect.x  ,objects_level_2.sprites()[6].rect.top ,800,3,6))
 monsters_level_2.add(Monsters('wispy',objects_level_2.sprites()[9].rect.x +100 ,objects_level_2.sprites()[1].rect.top-20,800,5,9))
@@ -864,7 +871,7 @@ coin_level_2.add(coins('coin',objects_level_2.sprites()[9].rect.x +620 ,objects_
 
 # for level two
 keys_level_2 = pygame.sprite.GroupSingle()
-keys_level_2.add(key('key',objects_level_2.sprites()[44].rect.x +100 ,objects_level_2.sprites()[44].rect.y + 300))
+keys_level_2.add(key('key',objects_level_2.sprites()[44].rect.x +110 ,objects_level_2.sprites()[44].rect.y + 310))
 
 
 
@@ -951,14 +958,13 @@ while run:
 			
 			# player.sprite.back_ground.play()
 			# pygame.mixer.Channel(6).play(back_ground_)
-			# back_ground_.play()
+			back_ground_.play()
 			font = pygame.font.Font("assets\\fonts\game_over.ttf", 90)
-			text = font.render(f'Coins : {coil_count}/24', True, "#F5F5F5")
-			text_rect = text.get_rect(center=(SCREEN_WIDTH/2,50))
+			text = font.render(f'Coins : {coil_count}/18', True, "#F5F5F5")
+			text_rect = text.get_rect(center=(SCREEN_WIDTH/2,70))
 				
 				
 			
-			screen.blit(text,text_rect)
 			# objects_d.update()  
 			# objects_d.draw(screen) 
 			objects_d_level_2.update()
@@ -988,6 +994,7 @@ while run:
 			health.update()
 			health.draw(screen)
 			collide()
+			screen.blit(text,text_rect)
 			# print(len(objects_level_2.sprites()))
 			
 

@@ -417,10 +417,10 @@ class coins(pygame.sprite.Sprite):
 			self.kill()
 			coil_count += 1
 
-		if player_2.sprite.rect.colliderect(self.rect):
-			pygame.mixer.Channel(3).play(self.get_damage)
-			self.kill()
-			coil_count += 1 
+		# if player_2.sprite.rect.colliderect(self.rect):
+		# 	pygame.mixer.Channel(3).play(self.get_damage)
+		# 	self.kill()
+		# 	coil_count += 1 
 
 class key(pygame.sprite.Sprite):
 	def __init__(self,type,x_pos,y_pos):
@@ -570,12 +570,12 @@ objects.add(Obstacle('land',(ground_width * 15)-50, SCREEN_HEIGHT-150))
 for i in range(16,20):
 	objects.add(Obstacle('land',(ground_width * i), SCREEN_HEIGHT+20))
 objects.add(Obstacle('land',(ground_width * 2)+50, SCREEN_HEIGHT-340))
-objects.add(Obstacle('land_2',(ground_width * 16)+100, SCREEN_HEIGHT-350))
-objects.add(Obstacle('land_2',(ground_width * 17)+100, SCREEN_HEIGHT-350))
-objects.add(Obstacle('land_2',(ground_width * 18)+100, SCREEN_HEIGHT-350))
-objects.add(Obstacle('land_3',(ground_width * 18)+500, SCREEN_HEIGHT-300))
-objects.add(Obstacle('land_3',(ground_width * 18)+800, SCREEN_HEIGHT-450))
-objects.add(Obstacle('land_3',(ground_width * 18)+1100, SCREEN_HEIGHT-450))
+objects.add(Obstacle('land_2',(ground_width * 16)+70, SCREEN_HEIGHT-340))
+objects.add(Obstacle('land_2',(ground_width * 17)+70, SCREEN_HEIGHT-340))
+objects.add(Obstacle('land_2',(ground_width * 18)+70, SCREEN_HEIGHT-340))
+objects.add(Obstacle('land_3',(ground_width * 18)+470, SCREEN_HEIGHT-290))
+objects.add(Obstacle('land_3',(ground_width * 18)+770, SCREEN_HEIGHT-440))
+objects.add(Obstacle('land_3',(ground_width * 18)+1070, SCREEN_HEIGHT-440))
 
 
 # monsters 
